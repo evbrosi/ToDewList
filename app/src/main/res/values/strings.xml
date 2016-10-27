@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MtnDew3</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name= "categories">
+        <item> personal </item>
+        <item> maritial </item>
+        <item> professional </item>
+    </string-array>
+
+</resources>
