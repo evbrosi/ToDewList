@@ -25,6 +25,7 @@ public class ToDoArrayAdapter extends ArrayAdapter<ToDoConstructor> {
         super(context, resource, objects);
         this.resource = resource;
         this.toDo = objects;
+
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
     }
@@ -32,25 +33,31 @@ public class ToDoArrayAdapter extends ArrayAdapter<ToDoConstructor> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
 
-        View toDoRow = inflater.inflate(resource, parent, false);
+        ToDoConstructor toDoThing69 = toDo.get(position);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+
+        View toDoRow = inflater.inflate(R.layout.card_of_todo, parent, false);
         //you know how in my Card_of_todo.xml file says text: @title and everything?
         // this is how that little bit happens.
-        TextView toDoTitle = (TextView)toDoRow.findViewById(R.id.todo_title);
-        TextView toDoText = (TextView)toDoRow.findViewById(R.id.todo_text);
-        TextView toDoDate = (TextView)toDoRow.findViewById(R.id.todo_date);
 
-        ToDoConstructor aToDo = toDo.get(position);
+        if(convertView ==null){
+            convertView= LayoutInflater.from(getContext()).inflate(R.layout.card_of_todo, parent, false);
+        }
 
-        toDoTitle.setText(aToDo.getTitle());
-        toDoText.setText(aToDo.getText());
+        TextView toDoTitle = (TextView) convertView.findViewById(R.id.todo_title);
+        TextView toDoText = (TextView) convertView.findViewById(R.id.todo_text);
+        TextView toDoDate = (TextView) convertView.findViewById(R.id.todo_date);
+
+        toDoTitle.setText(toDoThing69.getTitle());
+        toDoText.setText(toDoThing69.getText());
         // we gotta make this beast (date) into a string! we do that with Formatter.
-        toDoDate.setText(formatter.format(aToDo.getDate()));
+        toDoDate.setText(formatter.format(toDoThing69.getDate()));
 
-        return toDoRow;
+        return convertView;
     }
 
-    public void updateAdapter (ArrayList<ToDoConstructor> toDo){
-        this.toDo = toDo;
+    public void updateAdapter (ArrayList<ToDoConstructor> item1){
+        this.toDo = item1;
         super.notifyDataSetChanged();
     }
 }

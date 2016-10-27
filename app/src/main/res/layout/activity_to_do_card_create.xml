@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save?"
-        android:id="@+id/save_button"
+        android:id="@+id/save_button1"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/is_complete"
         android:onClick="isComplete"
-        android:layout_above="@+id/save_button"
+        android:layout_above="@+id/save_button1"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="72dp"
         android:focusable="false"

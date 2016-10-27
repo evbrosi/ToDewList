@@ -29,11 +29,10 @@ public class ToDoConstructor {
         this.key = key;
     }
 
-    public ToDoConstructor(String title, String text, Date date, String category) {
+    public ToDoConstructor(String title, String text, Date date) {
         this.title = title;
         this.text = text;
         this.date = date;
-        this.category =category;
         this.key = UUID.randomUUID().toString();
     }
 

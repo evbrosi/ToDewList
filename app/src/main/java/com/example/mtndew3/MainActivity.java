@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String CARD_TEXT = "com.elevenfifty.www.elevennote.NOTE_TEXT";
     public static final String DATE = "com.elevenfifty.www.elevennote.NOTE_TEXT";
 
-
     private ListView notesList;
     private ArrayList<ToDoConstructor> toDoArrayList;
     private Gson gson;
@@ -51,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(activity_main);
+        setContentView(R.layout.activity_main);
         toDoPrefs = getPreferences(Context.MODE_PRIVATE);
+
         gson = new Gson();
         setupToDoCards();
 
@@ -83,15 +83,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
-
-                intent.putExtra("cardTitle", "");
-                intent.putExtra("cardText", "");
-                intent.putExtra("date", "");
-
-                startActivityForResult(intent, -1);
-
+                startActivityForResult(intent, 1);
 //                Snackbar.make(view, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
-  //                      .setAction("Action", null).show();
+//                        .setAction("Action", null).show();
             }
         });
 
@@ -140,24 +134,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             int index = data.getIntExtra("Index", -1);
-            ToDoConstructor todoConstructor = new ToDoConstructor(data.getStringExtra("noteTitle"), data.getStringExtra("noteCard"), new Date(),
-                    data.getStringExtra("category"));
-
-            if (index == -1) {
+            ToDoConstructor todoConstructor = new ToDoConstructor(data.getStringExtra("title"), data.getStringExtra("text"), new Date());
+            if (index < 0 || index > toDoArrayList.size() - 1) {
                 toDoArrayList.add(todoConstructor);
-                writeToDos();
-            } else {
-                ToDoConstructor oldNote = toDoArrayList.get(index);
-                toDoArrayList.set(index, todoConstructor);
-                if (!oldNote.getTitle().equals(todoConstructor.getTitle())) {
-                    File oldFile = new File(this.getFilesDir(), "##" + oldNote.getTitle());
-                    File newFile = new File(this.getFilesDir(), "##" + todoConstructor.getTitle());
-                    oldFile.renameTo(newFile);
-                }
+                toDoArrayAdapter.updateAdapter(toDoArrayList);
             }
-
-//            Collections.sort(toDoArrayList);
-            toDoArrayAdapter.updateAdapter(toDoArrayList);
+            writeToDos();
         }
     }
 
@@ -178,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 toDoArrayList.add(card);
             }
         } else {
-            toDoList.add(new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date(), "personal"));
+            toDoList.add(new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date()));
             writeToDos();
         }
 
@@ -187,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = toDoPrefs.edit();
             editor.putBoolean("firstRun", false);
             editor.apply();
-            ToDoConstructor toDo1 = new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date(), "personal");
+            ToDoConstructor toDo1 = new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date());
             toDoArrayList.add(toDo1);
 
             for (ToDoConstructor aToDo: toDoArrayList) {
@@ -195,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else
         {
-            writeToDos();
+            readTodos(todoFile);
         }
     }
 
@@ -215,16 +197,7 @@ public class MainActivity extends AppCompatActivity {
             toDoList = Arrays.asList();
         }
     }
-
 /*
-        }
-        try {
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void returnFiles(){
         File[] filesDir = this.getFilesDir().listFiles();
         for (File file : filesDir) {
@@ -235,7 +208,6 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 title=title.substring(2,title.length());
             }
-
             Date date = new Date(file.lastModified());
             String text = "";
             try {

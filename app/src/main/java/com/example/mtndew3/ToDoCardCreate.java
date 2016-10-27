@@ -1,8 +1,10 @@
 package com.example.mtndew3;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,25 +28,28 @@ public class ToDoCardCreate extends AppCompatActivity {
         cardText = (EditText) findViewById(R.id.card_text);
 
         Intent intent = getIntent();
-        index = intent.getIntExtra(MainActivity.CARD_INDEX, -1);
 
-        cardTitle.setText(intent.getStringExtra(MainActivity.CARD_TITLE));
-        cardText.setText(intent.getStringExtra(MainActivity.CARD_TEXT));
+        index = intent.getIntExtra("index", -1);
 
-        Button saveButton = (Button) findViewById(R.id.save_button);
+        cardTitle.setText(intent.getStringExtra("title"));
+        cardText.setText(intent.getStringExtra("text"));
+
+        Button saveButton = (Button) findViewById(R.id.save_button1);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
-                intent.putExtra(MainActivity.CARD_INDEX, index);
-                intent.putExtra(MainActivity.CARD_TEXT, cardTitle.getText().toString());
-                intent.putExtra(MainActivity.CARD_TEXT, cardText.getText().toString());
+                intent.putExtra("title", cardTitle.getText().toString());
+                intent.putExtra("text", cardText.getText().toString());
+                Snackbar.make(v, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                intent.putExtra("index", index);
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
     }
-
+/*
     @Override
     public void onBackPressed() {
         setResult(RESULT_CANCELED);
@@ -63,5 +68,5 @@ public class ToDoCardCreate extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
