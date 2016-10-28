@@ -274,6 +274,9 @@ public class MainActivity extends AppCompatActivity {
     }
     */
 
+
+
+    /*
     private void writeToDos () {
         FileOutputStream outputStream = null;
         try {
@@ -294,6 +297,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+*/
+
+    private void writeToDos() {
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            String json = gson.toJson(toDoArrayList);
+            byte[] bytes = json.getBytes();
+            outputStream.write(bytes);
+
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.close();
+            } catch (Exception ignored) {}
+        }
+    }
+
+
+
+
+
 
 
 /*
@@ -330,7 +358,9 @@ public class MainActivity extends AppCompatActivity {
             file.delete();
         }
         for (ToDoConstructor note : toDoArrayList){
- //           writeFile(note);
+    //        saveIt(note);
         }
     }
+
+
 }

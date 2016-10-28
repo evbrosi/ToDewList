@@ -39,8 +39,7 @@ public class ToDoCardCreate extends AppCompatActivity {
         cardText.setText(intent.getStringExtra("text"));
         cardDueDate.setText(intent.getStringExtra("dueDate"));
 
-        CheckBox isItDone = (checkbox) findViewById(R.id.is_complete);
-        
+     //   CheckBox isItDone = (checkbox) findViewById(R.id.is_complete);
 
 
         Button saveButton = (Button) findViewById(R.id.save_button1);
