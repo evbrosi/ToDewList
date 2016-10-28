@@ -20,21 +20,6 @@
         android:ellipsize="end" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="title"
-        android:padding="30dp"
-        android:id="@+id/todo_text"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
-        android:ellipsize="end"
-        android:paddingTop="10dp"
-        android:layout_marginTop="18dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="last modified: "
@@ -42,7 +27,8 @@
         android:layout_marginStart="20dp"
         android:layout_below="@+id/textView"
         android:layout_toEndOf="@+id/textView"
-        android:layout_marginTop="128dp" />
+        android:layout_marginTop="128dp"
+        android:id="@+id/textView2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,12 +46,36 @@
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="date due"
+        android:text="dateModified due"
         android:padding="20dp"
         android:id="@+id/due_date"
         android:textColor="#ffffff"
         android:layout_marginEnd="68dp"
         android:layout_alignTop="@+id/todo_text"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="Category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignEnd="@+id/due_date"
+        android:layout_marginEnd="10dp"
+        android:textColor="#ffffff"
+        android:id="@+id/todo_category" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="text"
+        android:padding="30dp"
+        android:id="@+id/todo_text"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:ellipsize="end"
+        android:paddingTop="10dp"
+        android:layout_above="@+id/todo_category"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

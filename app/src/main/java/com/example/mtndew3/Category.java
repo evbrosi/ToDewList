@@ -13,9 +13,9 @@ public class Category {
     private String name;
 
     @SerializedName("cards")
-    public ArrayList<ToDoConstructor> cards;
+    public ArrayList<ToDoItem> cards;
 
-    public Category (String name, ArrayList<ToDoConstructor>cards){
+    public Category (String name, ArrayList<ToDoItem>cards){
         this.name= name;
         this.cards = cards;
     }

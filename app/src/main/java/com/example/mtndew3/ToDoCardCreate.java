@@ -20,6 +20,12 @@ public class ToDoCardCreate extends AppCompatActivity {
     private int index;
     private EditText cardTitle;
     private EditText cardText;
+    private EditText cardDueYear;
+    private EditText cardDueMonth;
+    private EditText cardDueDay;
+    private EditText cardDueMinute;
+    private EditText cardDueHour;
+    private EditText cardCategory;
     private EditText cardDueDate;
 
     @Override
@@ -29,7 +35,13 @@ public class ToDoCardCreate extends AppCompatActivity {
 
         cardTitle = (EditText) findViewById(R.id.card_title);
         cardText = (EditText) findViewById(R.id.card_text);
+        cardDueYear = (EditText) findViewById(R.id.due_year);
+        cardDueMonth = (EditText) findViewById(R.id.due_month);
+        cardDueDay = (EditText) findViewById(R.id.due_day);
+        cardDueHour = (EditText) findViewById(R.id.due_hour);
+        cardDueMinute = (EditText) findViewById(R.id.due_minute);
         cardDueDate = (EditText) findViewById(R.id.due_date);
+        cardCategory = (EditText) findViewById(R.id.card_category);
 
         Intent intent = getIntent();
 
@@ -37,10 +49,15 @@ public class ToDoCardCreate extends AppCompatActivity {
 
         cardTitle.setText(intent.getStringExtra("title"));
         cardText.setText(intent.getStringExtra("text"));
+        cardDueYear.setText(intent.getStringExtra("yyyy"));
+        cardDueMonth.setText(intent.getStringExtra("mm"));
+        cardDueDay.setText(intent.getStringExtra("dd"));
+        cardDueHour.setText(intent.getStringExtra("HR"));
+        cardDueMinute.setText(intent.getStringExtra("MI"));
         cardDueDate.setText(intent.getStringExtra("dueDate"));
+        cardCategory.setText(intent.getStringExtra("category"));
 
-     //   CheckBox isItDone = (checkbox) findViewById(R.id.is_complete);
-
+        //   CheckBox isItDone = (checkbox) findViewById(R.id.is_complete);
 
         Button saveButton = (Button) findViewById(R.id.save_button1);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -49,16 +66,24 @@ public class ToDoCardCreate extends AppCompatActivity {
                 Intent intent = getIntent();
                 intent.putExtra("title", cardTitle.getText().toString());
                 intent.putExtra("text", cardText.getText().toString());
-                Snackbar.make(v, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                intent.putExtra("yyyy", cardDueYear.getText().toString());
+                intent.putExtra("mm", cardDueMonth.getText().toString());
+                intent.putExtra("dd", cardDueDay.getText().toString());
+                intent.putExtra("yyyy", cardDueYear.getText().toString());
                 intent.putExtra("dueDate", cardDueDate.getText().toString());
+                intent.putExtra("category", cardCategory.getText().toString());
                 intent.putExtra("index", index);
+//                cardDueDate = cardDueHour +":"+ cardDueMinute+" on "+ cardDueMonth + "/" + cardDueDay + "/" + cardDueYear;
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
     }
 
+
+
+//    Snackbar.make(v, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
+//            .setAction("Action", null).show();
 
 //        ArrayAdapter.createFromResource(this, R.array.categories, R.layout.support_simple_spinner_dropdown_item);
 //            onOptionsItemSelected()
@@ -83,8 +108,4 @@ public class ToDoCardCreate extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }*/
-
-
-
-
 }

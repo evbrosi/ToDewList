@@ -5,23 +5,26 @@ import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import static android.R.attr.resource;
 
 /**
  * Created by eaglebrosi on 10/28/16.
  */
 
-public class CategoryAdapter {
-    private ArrayList<Object> items;
+public class CategoryAdapter extends ArrayAdapter<Category> {
+    private ArrayList<Category> items;
     private LayoutInflater layoutInflater;
 
     private static final int TYPE_TODOCONTSTURCTOR = 0;
     private static final int TYPE_CATEGORY = 1;
 
-    public CategoryAdapter(Context context, ArrayList<Object> object){
+    public CategoryAdapter(Context context, int resource, ArrayList<Category> object){
+        super(context, resource, object);
         this.items = object;
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -39,10 +42,10 @@ public class CategoryAdapter {
 
     // Get the position of our item in the array
     @Override
-    public Object getItem(int position) {
+    public Category getItem(int position) {
         return items.get(position);
     }
-
+/*
     // Determine the amount of separate views our adapter will need to handle
     @Override
     public int getViewTypeCount() {
@@ -52,7 +55,7 @@ public class CategoryAdapter {
     // Determine the type of view we will need to use for the position in our item array
     @Override
     public int getItemViewType(int position) {
-        if(getItem(position) instanceof ToDoConstructor) {
+        if(getItem(position) instanceof ToDoItem) {
             return TYPE_TODOCONTSTURCTOR;
         }
         return TYPE_CATEGORY;
@@ -77,7 +80,7 @@ public class CategoryAdapter {
         }
 
         if(type == TYPE_TODOCONTSTURCTOR) {
-            ContactsContract.CommonDataKinds.Note note = (ToDoConstructor)getItem(position);
+            ContactsContract.CommonDataKinds.Note note = (ToDoItem)getItem(position);
             TextView title = (TextView) convertView.findViewById(R.id.card_title);
             TextView text = (TextView) convertView.findViewById(R.id.card_text);
             TextView date = (TextView) convertView.findViewById(R.id.date);
@@ -91,4 +94,5 @@ public class CategoryAdapter {
         }
         return convertView;
     }
+    */
 }

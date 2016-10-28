@@ -1,28 +1,26 @@
 package com.example.mtndew3;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import com.google.gson.annotations.SerializedName;
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,30 +29,32 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.mtndew3.R.layout.activity_main;
+import static android.R.attr.data;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String CARD_INDEX = "com.elevenfifty.www.elevennote.NOTE_INDEX";
-    public static final String CARD_TITLE = "com.elevenfifty.www.elevennote.NOTE_TITLE";
-    public static final String CARD_TEXT = "com.elevenfifty.www.elevennote.NOTE_TEXT";
-    public static final String DATE = "com.elevenfifty.www.elevennote.NOTE_TEXT";
 
     private ListView notesList;
-    private ArrayList<ToDoConstructor> toDoArrayList;
+    private ArrayList<ToDoItem> toDoArrayList;
     private Gson gson;
-    List<ToDoConstructor> toDoList = new ArrayList<>();
+    List<ToDoItem> toDoList = new ArrayList<>();
     private SharedPreferences toDoPrefs;
     private ToDoArrayAdapter toDoArrayAdapter;
     String filename = "ToDoItemsFile";
+    TextView toDoTitle;
+    TextView toDoDate;
+    TextView toDoText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toDoPrefs = getPreferences(Context.MODE_PRIVATE);
+        toDoTitle = (TextView) findViewById(R.id.todo_title);
+        toDoDate = (TextView) findViewById(R.id.due_date);
+        toDoText = (TextView) findViewById(R.id.todo_text);
 
         gson = new Gson();
-        setupToDoCards();
+//        setupToDoCards();
 
         notesList = (ListView)findViewById(R.id.listView);
         toDoArrayAdapter = new ToDoArrayAdapter(this, R.layout.card_of_todo, toDoArrayList);
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         notesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ToDoConstructor note = toDoArrayList.get(position);
+                ToDoItem note = toDoArrayList.get(position);
 
                 Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
                 intent.putExtra("Title", note.getTitle());
@@ -93,13 +93,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ToDoConstructor toDoConstructor = toDoArrayList.get(position);
+                ToDoItem toDoItem = toDoArrayList.get(position);
 
                 Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
 
-                intent.putExtra("toDoTitle", toDoConstructor.getTitle());
-                intent.putExtra("completionDueDate", toDoConstructor.getDate());
-                intent.putExtra("category", toDoConstructor.getCategory());
+                intent.putExtra("toDoTitle", toDoItem.getTitle());
+                intent.putExtra("completionDueDate", toDoItem.getDateModified());
+                intent.putExtra("category", toDoItem.getCategory());
 
                 intent.putExtra("Index", position);
 
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 alertBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ToDoConstructor note = toDoArrayList.get(position);
+                        ToDoItem note = toDoArrayList.get(position);
                         deleteFile("##" + note.getTitle());
                         toDoArrayList.remove(position);
                         toDoArrayAdapter.updateAdapter(toDoArrayList);
@@ -134,54 +134,81 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             int index = data.getIntExtra("Index", -1);
-            ToDoConstructor todoConstructor = new ToDoConstructor(data.getStringExtra("title"), data.getStringExtra("text"),
-                    new Date(), data.getStringExtra("dueDate"));
+            // TODO i put null for categories- fix it.
+            ToDoItem card = new ToDoItem(data.getStringExtra("title"),
+                    data.getStringExtra("text"),
+                    data.getStringExtra("due_date"),
+                    new Date(),
+                    data.getStringExtra("category"));
             if (index < 0 || index > toDoArrayList.size() - 1) {
-                toDoArrayList.add(todoConstructor);
-                toDoArrayAdapter.updateAdapter(toDoArrayList);
+                toDoArrayList.add(todoItem);
+            }else {
+                ToDoItem oldCard = toDoArrayList.get(index);
+                toDoArrayList.set(index, card);
+                if (!oldCard.getTitle().equals(todoItem.getTitle()){
+                    File oldFile = new File (this.getFilesDir(), oldCard.getTitle());
+                    File newFile = new File (this.getFilesDir(), todoItem.getTitle());
+                    oldFile.renameTo(newFile);
+                }
             }
             writeToDos();
+            toDoArrayList.updateAdapter(toDoArrayList);
         }
     }
 
+
+//        getIntent();
+//        String title = data.getStringExtra("title");
+//        String fullDate = data.getStringExtra("fullDate");
+//        String text = data.getStringExtra("text");
+//        toDoTitle.setText(title);
+//        toDoDate.setText(fullDate);
+
+
+
+
     //   private ListView notesList;
-    // private ArrayList<ToDoConstructor> arrayOfList;
+    // private ArrayList<ToDoItem> arrayOfList;
 
     public void setupToDoCards() {
         toDoArrayList = new ArrayList<>();
 
-        File filesDir = this.getFilesDir();
+        if (toDoPrefs.getBoolean("firstRun", true)) {
+            SharedPreferences.Editor editor = toDoPrefs.edit();
+            editor.putBoolean("firstRun", false);
+            editor.apply();
+
+            ToDoItem toDo1 = new ToDoItem("Mountain Dew", "This is your first To dew", "01/13/1984", "personal");
+            toDoArrayList.add(toDo1);
+
+            for (ToDoItem aToDo : toDoArrayList) {
+                saveIt(aToDo);
+            }
+        } else {
+            File[] filesDir = this.getFilesDir().listFiles();
+
+            for (File file: filesDir) {
+                readTodos(file);
+            }
+        }
+    }
+/*
+
         File todoFile = new File(filesDir + File.separator + filename);
 
         if (todoFile.exists()){
             readTodos(todoFile);
 
-            for (ToDoConstructor card : toDoList) {
+            for (ToDoItem card : toDoList) {
                 Log.d("To do read from file", card.getTitle() + "" + card.getText());
                 toDoArrayList.add(card);
             }
         } else {
-            toDoList.add(new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date(), "01/13/1984"));
+            toDoList.add(new ToDoItem("Mountain Dew", "This is your first To dew", new Date(), "01/13/1984", "personal"));
             writeToDos();
         }
-
-        toDoArrayList = new ArrayList<>();
-        if (toDoPrefs.getBoolean("firstRun", true)) {
-            SharedPreferences.Editor editor = toDoPrefs.edit();
-            editor.putBoolean("firstRun", false);
-            editor.apply();
-            ToDoConstructor toDo1 = new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date(), "01/13/1984");
-            toDoArrayList.add(toDo1);
-
-            for (ToDoConstructor aToDo: toDoArrayList) {
-                writeToDos();
-            }
-        } else
-        {
-            readTodos(todoFile);
-        }
     }
-
+*/
     private void readTodos(File todoFile) {
         FileInputStream inputStream = null;
         String todosText = "";
@@ -194,11 +221,39 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            ToDoConstructor[] noteList = gson.fromJson(todosText, ToDoConstructor[].class);
+//            ToDoItem[] noteList = gson.fromJson(todosText, ToDoItem[].class);
             toDoList = Arrays.asList();
         }
     }
-/*
+
+    private void saveIt(ToDoItem aToDo) {
+        //  if()
+
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = openFileOutput("##" + aToDo.getTitle(), Context.MODE_PRIVATE);
+            outputStream.write(aToDo.getText().getBytes());
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.close();
+            } catch (IOException ioe) {
+            } catch (NullPointerException npe) {
+            } catch (Exception e) {
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+    /*
     private void returnFiles(){
         File[] filesDir = this.getFilesDir().listFiles();
         for (File file : filesDir) {
@@ -226,9 +281,13 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            toDoArrayList.add(new ToDoConstructor(title, text, date, null));
+            toDoArrayList.add(new ToDoItem(title, text, date, null));
         }
     }
+
+
+
+
 
             arrayOfList = new ArrayList<>();
         if (toDoPrefs.getBoolean("firstRun", true)){
@@ -237,10 +296,10 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
 
             // this just shows what the card looks like. It populates with true because it's done.
-            ToDoConstructor toDo1 = new ToDoConstructor("Mountain Dew", "This is your first To do", new Date(), true);
+            ToDoItem toDo1 = new ToDoItem("Mountain Dew", "This is your first To do", new Date(), true);
             arrayOfList.add(toDo1);
 
-            for (ToDoConstructor aToDo: arrayOfList) {
+            for (ToDoItem aToDo: arrayOfList) {
                 writeFile(aToDo);
             }
         } else {
@@ -262,8 +321,8 @@ public class MainActivity extends AppCompatActivity {
                     } catch (IOException e) {
                     e.printStackTrace();
                     } finally {
-                        ToDoConstructor aToDo = gson.fromJson(text, ToDoConstructor.class);
-                    aToDo.setDate(date);
+                        ToDoItem aToDo = gson.fromJson(text, ToDoItem.class);
+                    aToDo.setDateModified(date);
                     arrayOfList.add(aToDo);
                     try {
                         inputStream.close();
@@ -319,11 +378,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
 /*
             outputStream.write(gson.toJson(aToDo).getBytes());
             outputStream.flush();
@@ -357,8 +411,8 @@ public class MainActivity extends AppCompatActivity {
         for(File file : filesDir){
             file.delete();
         }
-        for (ToDoConstructor note : toDoArrayList){
-    //        saveIt(note);
+        for (ToDoItem note : toDoArrayList){
+            saveIt(note);
         }
     }
 

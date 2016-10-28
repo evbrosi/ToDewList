@@ -9,15 +9,16 @@ import java.util.UUID;
  * Created by eaglebrosi on 10/26/16.
  */
 
-public class ToDoConstructor {
+public class ToDoItem {
     @SerializedName("title")
     private String title;
     @SerializedName("text")
     private String text;
-    @SerializedName("date")
-    private Date date;
+    @SerializedName("dateModified")
+    private Date dateModified;
     @SerializedName("dueDate")
     private String dueDate;
+
     private String category;
     @SerializedName("key")
     private String key;
@@ -30,14 +31,15 @@ public class ToDoConstructor {
         this.key = key;
     }
 
-    public ToDoConstructor(String title, String text, Date date, String dueDate) {
+    public ToDoItem(String title, String text, String dueDate, Date dateModified, String category) {
         this.title = title;
         this.text = text;
-        this.date = date;
+        this.dateModified = dateModified;
         this.dueDate = dueDate;
-
+        this.category = category;
         this.key = UUID.randomUUID().toString();
     }
+
 
     public String getCategory() {
         return category;
@@ -71,12 +73,12 @@ public class ToDoConstructor {
         this.text = text;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateModified() {
+        return dateModified;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateModified(Date dateModified) {
+        this.dateModified = dateModified;
     }
 
 }
