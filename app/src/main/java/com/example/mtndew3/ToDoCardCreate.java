@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import static com.example.mtndew3.R.id.activity_to_do_card_create;
@@ -37,6 +39,10 @@ public class ToDoCardCreate extends AppCompatActivity {
         cardText.setText(intent.getStringExtra("text"));
         cardDueDate.setText(intent.getStringExtra("dueDate"));
 
+        CheckBox isItDone = (checkbox) findViewById(R.id.is_complete);
+        
+
+
         Button saveButton = (Button) findViewById(R.id.save_button1);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +59,11 @@ public class ToDoCardCreate extends AppCompatActivity {
             }
         });
     }
+
+
+//        ArrayAdapter.createFromResource(this, R.array.categories, R.layout.support_simple_spinner_dropdown_item);
+//            onOptionsItemSelected()
+
 /*
     @Override
     public void onBackPressed() {
@@ -73,4 +84,8 @@ public class ToDoCardCreate extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }*/
+
+
+
+
 }
