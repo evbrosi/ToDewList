@@ -33,6 +33,8 @@ import static android.R.attr.data;
 
 public class MainActivity extends AppCompatActivity {
 
+    WHATTTT
+
     private ListView notesList;
     private ArrayList<ToDoItem> toDoArrayList;
     private Gson gson;
@@ -67,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
                 intent.putExtra("Title", note.getTitle());
                 intent.putExtra("Text", note.getText());
+                intent.putExtra("category", note.getCategory());
+                intent.putExtra("dueDate", note.getDueDate());
                 intent.putExtra("Index", position);
 
                 startActivityForResult(intent, 1);
@@ -141,18 +145,18 @@ public class MainActivity extends AppCompatActivity {
                     new Date(),
                     data.getStringExtra("category"));
             if (index < 0 || index > toDoArrayList.size() - 1) {
-                toDoArrayList.add(todoItem);
+                toDoArrayList.add(card);
             }else {
                 ToDoItem oldCard = toDoArrayList.get(index);
                 toDoArrayList.set(index, card);
-                if (!oldCard.getTitle().equals(todoItem.getTitle()){
+                if (!oldCard.getTitle().equals(card.getTitle())) {
                     File oldFile = new File (this.getFilesDir(), oldCard.getTitle());
-                    File newFile = new File (this.getFilesDir(), todoItem.getTitle());
+                    File newFile = new File (this.getFilesDir(), card.getTitle());
                     oldFile.renameTo(newFile);
                 }
             }
             writeToDos();
-            toDoArrayList.updateAdapter(toDoArrayList);
+            toDoArrayAdapter.updateAdapter(toDoArrayList);
         }
     }
 
@@ -178,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("firstRun", false);
             editor.apply();
 
-            ToDoItem toDo1 = new ToDoItem("Mountain Dew", "This is your first To dew", "01/13/1984", "personal");
+            ToDoItem toDo1 = new ToDoItem("Mountain Dew", "This is your first To dew", "01/13/1984", new Date(), "personal");
             toDoArrayList.add(toDo1);
 
             for (ToDoItem aToDo : toDoArrayList) {
