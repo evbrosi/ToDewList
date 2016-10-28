@@ -16,7 +16,8 @@ public class ToDoConstructor {
     private String text;
     @SerializedName("date")
     private Date date;
-
+    @SerializedName("dueDate")
+    private String dueDate;
     private String category;
     @SerializedName("key")
     private String key;
@@ -29,10 +30,12 @@ public class ToDoConstructor {
         this.key = key;
     }
 
-    public ToDoConstructor(String title, String text, Date date) {
+    public ToDoConstructor(String title, String text, Date date, String dueDate) {
         this.title = title;
         this.text = text;
         this.date = date;
+        this.dueDate = dueDate;
+
         this.key = UUID.randomUUID().toString();
     }
 
@@ -50,6 +53,14 @@ public class ToDoConstructor {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
     }
 
     public String getText() {

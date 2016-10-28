@@ -18,6 +18,7 @@ public class ToDoCardCreate extends AppCompatActivity {
     private int index;
     private EditText cardTitle;
     private EditText cardText;
+    private EditText cardDueDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class ToDoCardCreate extends AppCompatActivity {
 
         cardTitle = (EditText) findViewById(R.id.card_title);
         cardText = (EditText) findViewById(R.id.card_text);
+        cardDueDate = (EditText) findViewById(R.id.due_date);
 
         Intent intent = getIntent();
 
@@ -33,6 +35,7 @@ public class ToDoCardCreate extends AppCompatActivity {
 
         cardTitle.setText(intent.getStringExtra("title"));
         cardText.setText(intent.getStringExtra("text"));
+        cardDueDate.setText(intent.getStringExtra("dueDate"));
 
         Button saveButton = (Button) findViewById(R.id.save_button1);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +46,7 @@ public class ToDoCardCreate extends AppCompatActivity {
                 intent.putExtra("text", cardText.getText().toString());
                 Snackbar.make(v, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                intent.putExtra("dueDate", cardDueDate.getText().toString());
                 intent.putExtra("index", index);
                 setResult(RESULT_OK, intent);
                 finish();

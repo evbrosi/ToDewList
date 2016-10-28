@@ -134,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             int index = data.getIntExtra("Index", -1);
-            ToDoConstructor todoConstructor = new ToDoConstructor(data.getStringExtra("title"), data.getStringExtra("text"), new Date());
+            ToDoConstructor todoConstructor = new ToDoConstructor(data.getStringExtra("title"), data.getStringExtra("text"),
+                    new Date(), data.getStringExtra("dueDate"));
             if (index < 0 || index > toDoArrayList.size() - 1) {
                 toDoArrayList.add(todoConstructor);
                 toDoArrayAdapter.updateAdapter(toDoArrayList);
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                 toDoArrayList.add(card);
             }
         } else {
-            toDoList.add(new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date()));
+            toDoList.add(new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date(), "01/13/1984"));
             writeToDos();
         }
 
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = toDoPrefs.edit();
             editor.putBoolean("firstRun", false);
             editor.apply();
-            ToDoConstructor toDo1 = new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date());
+            ToDoConstructor toDo1 = new ToDoConstructor("Mountain Dew", "This is your first To dew", new Date(), "01/13/1984");
             toDoArrayList.add(toDo1);
 
             for (ToDoConstructor aToDo: toDoArrayList) {
@@ -319,5 +320,17 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_note_detail, menu);
         return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedState){
+        //Do whatever you want to do when the application stops.
+        File[] filesDir = MainActivity.this.getFilesDir().listFiles();
+        for(File file : filesDir){
+            file.delete();
+        }
+        for (ToDoConstructor note : toDoArrayList){
+ //           writeFile(note);
+        }
     }
 }

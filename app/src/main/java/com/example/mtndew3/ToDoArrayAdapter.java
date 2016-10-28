@@ -47,9 +47,11 @@ public class ToDoArrayAdapter extends ArrayAdapter<ToDoConstructor> {
         TextView toDoTitle = (TextView) convertView.findViewById(R.id.todo_title);
         TextView toDoText = (TextView) convertView.findViewById(R.id.todo_text);
         TextView toDoDate = (TextView) convertView.findViewById(R.id.todo_date);
+        TextView toDoDueDate = (TextView) convertView.findViewById(R.id.due_date);
 
         toDoTitle.setText(toDoThing69.getTitle());
         toDoText.setText(toDoThing69.getText());
+        toDoDueDate.setText(toDoThing69.getDueDate());
         // we gotta make this beast (date) into a string! we do that with Formatter.
         toDoDate.setText(formatter.format(toDoThing69.getDate()));
 
