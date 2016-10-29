@@ -25,8 +25,8 @@
             android:layout_height="200dp"
             android:inputType="textMultiLine"
             android:ems="10"
-            android:id="@+id/card_text"
-            android:layout_below="@+id/card_title"
+            android:id="@+id/create_text"
+            android:layout_below="@+id/create_title"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="10dp"
@@ -36,105 +36,43 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save?"
+        android:text="SAVE?"
         android:id="@+id/save_button1"
+        android:textStyle="bold"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
 
-    <EditText
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/due_month"
-        android:text="mm"
-        android:background="#ffffff"
-        android:inputType="datetime"
-        android:maxLength="2"
-        android:singleLine="true"
-        android:selectAllOnFocus="true"
-        android:layout_alignBaseline="@+id/is_complete"
-        android:layout_alignBottom="@+id/is_complete"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/due_hour"
-        android:text="24"
-        android:background="#ffffff"
-        android:inputType="datetime"
-        android:maxLength="2"
-        android:singleLine="true"
-        android:selectAllOnFocus="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/is_complete" />
 
     <EditText
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:id="@+id/card_category"
+        android:id="@+id/create_category"
         android:background="#ffffff"
-        android:layout_below="@+id/due_hour"
         android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Category: "
-        android:layout_alignBottom="@+id/card_category"
-        android:layout_toStartOf="@+id/card_category"
+        android:layout_toStartOf="@+id/create_category"
         android:layout_marginEnd="12dp" />
 
     <CheckBox
         android:text="completed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/is_complete"
-        android:onClick="isComplete"
+        android:id="@+id/is_it_complete_button"
         android:focusable="false"
         android:layout_marginTop="42dp"
-        android:layout_below="@+id/card_text"
-        android:layout_alignStart="@+id/card_category" />
+        android:layout_below="@+id/create_text"
+        android:layout_alignStart="@+id/create_category" />
 
     <EditText
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/due_date"
-        android:text="yyyy"
-        android:background="#ffffff"
-        android:inputType="datetime"
-        android:maxLength="4"
-        android:singleLine="true"
-        android:selectAllOnFocus="true"
-        android:layout_toEndOf="@+id/due_day"
-        android:layout_alignTop="@+id/due_day"
-        android:layout_alignBottom="@+id/due_day" />
+        android:id="@+id/create_due_date"
+        android:text="Due Date"
+        android:background="#ffffff" />
 
-    <EditText
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/due_minute"
-        android:text="59"
-        android:background="#ffffff"
-        android:inputType="datetime"
-        android:maxLength="2"
-        android:singleLine="true"
-        android:selectAllOnFocus="true"
-        android:layout_alignStart="@+id/due_day"
-        android:layout_toStartOf="@+id/due_year"
-        android:layout_alignTop="@+id/due_hour" />
 
-    <EditText
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/due_day"
-        android:text="dd"
-        android:background="#ffffff"
-        android:inputType="datetime"
-        android:maxLength="2"
-        android:singleLine="true"
-        android:selectAllOnFocus="true"
-        android:layout_marginStart="11dp"
-        android:layout_alignBaseline="@+id/due_month"
-        android:layout_alignBottom="@+id/due_month"
-        android:layout_toEndOf="@+id/due_month" />
 </RelativeLayout>

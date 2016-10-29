@@ -36,15 +36,15 @@ public class ToDoCardCreate extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_card_create);
 
-        cardTitle = (EditText) findViewById(R.id.card_title);
-        cardText = (EditText) findViewById(R.id.card_text);
+        cardTitle = (EditText) findViewById(R.id.create_title);
+        cardText = (EditText) findViewById(R.id.create_text);
 //        cardDueYear = (EditText) findViewById(R.id.due_year);
 //        cardDueMonth = (EditText) findViewById(R.id.due_month);
 //        cardDueDay = (EditText) findViewById(R.id.due_day);
 //        cardDueHour = (EditText) findViewById(R.id.due_hour);
 //        cardDueMinute = (EditText) findViewById(R.id.due_minute);
-        cardDueDate = (EditText) findViewById(R.id.due_date);
-        cardCategory = (EditText) findViewById(R.id.card_category);
+        cardDueDate = (EditText) findViewById(R.id.create_due_date);
+        cardCategory = (EditText) findViewById(R.id.create_category);
 
         Intent intent = getIntent();
 
@@ -62,17 +62,12 @@ public class ToDoCardCreate extends AppCompatActivity {
 
         //   CheckBox isItDone = (checkbox) findViewById(R.id.is_complete);
 
-        Button saveButton = (Button) findViewById(R.id.save_button1);
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        save_button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
                 intent.putExtra("title", cardTitle.getText().toString());
                 intent.putExtra("text", cardText.getText().toString());
-                intent.putExtra("yyyy", cardDueYear.getText().toString());
-                intent.putExtra("mm", cardDueMonth.getText().toString());
-                intent.putExtra("dd", cardDueDay.getText().toString());
-                intent.putExtra("yyyy", cardDueYear.getText().toString());
                 intent.putExtra("dueDate", cardDueDate.getText().toString());
                 intent.putExtra("category", cardCategory.getText().toString());
                 intent.putExtra("index", index);
