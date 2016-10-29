@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.w3c.dom.Text;
 
@@ -23,22 +24,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import static android.R.attr.data;
+import static com.example.mtndew3.R.array.categories;
 
 public class MainActivity extends AppCompatActivity {
-
-    WHATTTT
 
     private ListView notesList;
     private ArrayList<ToDoItem> toDoArrayList;
     private Gson gson;
-    List<ToDoItem> toDoList = new ArrayList<>();
+    List<Category> categories = new ArrayList<>();
     private SharedPreferences toDoPrefs;
     private ToDoArrayAdapter toDoArrayAdapter;
     String filename = "ToDoItemsFile";
@@ -167,35 +169,36 @@ public class MainActivity extends AppCompatActivity {
 //        String text = data.getStringExtra("text");
 //        toDoTitle.setText(title);
 //        toDoDate.setText(fullDate);
-
-
-
-
     //   private ListView notesList;
     // private ArrayList<ToDoItem> arrayOfList;
 
     public void setupToDoCards() {
-        toDoArrayList = new ArrayList<>();
+            toDoArrayList = new ArrayList<>();
 
-        if (toDoPrefs.getBoolean("firstRun", true)) {
-            SharedPreferences.Editor editor = toDoPrefs.edit();
-            editor.putBoolean("firstRun", false);
-            editor.apply();
+            File filesDir = this.getFilesDir();
+            File todoFile = new File(filesDir + File.separator + filename);
+            if (todoFile.exists()){
+                readTodos(todoFile);
+            }else {
+                //new way
+                categories.add(new Category("Personal", new ArrayList<ToDoItem>()));
+                categories.add(new Category("Maritial", new ArrayList<ToDoItem>()));
+                categories.add(new Category("Professional", new ArrayList<ToDoItem>()));
 
-            ToDoItem toDo1 = new ToDoItem("Mountain Dew", "This is your first To dew", "01/13/1984", new Date(), "personal");
-            toDoArrayList.add(toDo1);
+                for(int i = 0; i < categories.size(); i++) {
+                    categories.get(i).cards.add(new ToDoItem("Mountain Dew",
+                            "This is your first To dew",
+                            "Maritial",
+                            new Date(),
+                            "01/13/1984"));
 
-            for (ToDoItem aToDo : toDoArrayList) {
-                saveIt(aToDo);
-            }
-        } else {
-            File[] filesDir = this.getFilesDir().listFiles();
-
-            for (File file: filesDir) {
-                readTodos(file);
+//                    categories.get(i).notes.add(new ToDoItem("Note 1", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
+//                    categories.get(i).notes.add(new T("Note 2", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
+//                    categories.get(i).notes.add(new Note("Note 3", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
+                }
+                writeToDos();
             }
         }
-    }
 /*
 
         File todoFile = new File(filesDir + File.separator + filename);
@@ -225,10 +228,24 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-//            ToDoItem[] noteList = gson.fromJson(todosText, ToDoItem[].class);
-            toDoList = Arrays.asList();
+
+            // Determine type of our collection
+            Type collectionType = new TypeToken<List<Category>>(){}.getType();
+            // Pull out our categories in a list
+            List<Category> categoryList = gson.fromJson(todosText, collectionType);
+            // Create a LinkedList that we can edit from our categories list and save it
+            // to our global categories
+            //Todo they want this final- maybe it'll fix itself.
+            categories = new LinkedList(categoryList);
+            // old way
+//            Note[] noteList = gson.fromJson(todosText, Note[].class);
+//            noteLists = Arrays.asList(noteList);
+
+            //Object[] notesArray = noteLists.toArray();
         }
-    }
+//            ToDoItem[] noteList = gson.fromJson(todosText, ToDoItem[].class);
+        }
+
 
     private void saveIt(ToDoItem aToDo) {
         //  if()
@@ -288,10 +305,6 @@ public class MainActivity extends AppCompatActivity {
             toDoArrayList.add(new ToDoItem(title, text, date, null));
         }
     }
-
-
-
-
 
             arrayOfList = new ArrayList<>();
         if (toDoPrefs.getBoolean("firstRun", true)){
@@ -381,7 +394,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
 /*
             outputStream.write(gson.toJson(aToDo).getBytes());
             outputStream.flush();
@@ -419,6 +431,4 @@ public class MainActivity extends AppCompatActivity {
             saveIt(note);
         }
     }
-
-
 }

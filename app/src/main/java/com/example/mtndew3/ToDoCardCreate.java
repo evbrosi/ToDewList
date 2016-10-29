@@ -1,5 +1,6 @@
 package com.example.mtndew3;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,13 +21,15 @@ public class ToDoCardCreate extends AppCompatActivity {
     private int index;
     private EditText cardTitle;
     private EditText cardText;
-    private EditText cardDueYear;
-    private EditText cardDueMonth;
-    private EditText cardDueDay;
-    private EditText cardDueMinute;
-    private EditText cardDueHour;
+//    private EditText cardDueYear;
+//    private EditText cardDueMonth;
+//    private EditText cardDueDay;
+//    private EditText cardDueMinute;
+//    private EditText cardDueHour;
+    // I really don't want to talk about WHAT A HORRIBLE MESS THE DATE PICK HORRIBLE MESS WAS.
     private EditText cardCategory;
     private EditText cardDueDate;
+    private Button save_button1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +38,11 @@ public class ToDoCardCreate extends AppCompatActivity {
 
         cardTitle = (EditText) findViewById(R.id.card_title);
         cardText = (EditText) findViewById(R.id.card_text);
-        cardDueYear = (EditText) findViewById(R.id.due_year);
-        cardDueMonth = (EditText) findViewById(R.id.due_month);
-        cardDueDay = (EditText) findViewById(R.id.due_day);
-        cardDueHour = (EditText) findViewById(R.id.due_hour);
-        cardDueMinute = (EditText) findViewById(R.id.due_minute);
+//        cardDueYear = (EditText) findViewById(R.id.due_year);
+//        cardDueMonth = (EditText) findViewById(R.id.due_month);
+//        cardDueDay = (EditText) findViewById(R.id.due_day);
+//        cardDueHour = (EditText) findViewById(R.id.due_hour);
+//        cardDueMinute = (EditText) findViewById(R.id.due_minute);
         cardDueDate = (EditText) findViewById(R.id.due_date);
         cardCategory = (EditText) findViewById(R.id.card_category);
 
@@ -49,11 +52,11 @@ public class ToDoCardCreate extends AppCompatActivity {
 
         cardTitle.setText(intent.getStringExtra("title"));
         cardText.setText(intent.getStringExtra("text"));
-        cardDueYear.setText(intent.getStringExtra("yyyy"));
-        cardDueMonth.setText(intent.getStringExtra("mm"));
-        cardDueDay.setText(intent.getStringExtra("dd"));
-        cardDueHour.setText(intent.getStringExtra("HR"));
-        cardDueMinute.setText(intent.getStringExtra("MI"));
+//        cardDueYear.setText(intent.getStringExtra("yyyy"));
+//        cardDueMonth.setText(intent.getStringExtra("mm"));
+//        cardDueDay.setText(intent.getStringExtra("dd"));
+//        cardDueHour.setText(intent.getStringExtra("HR"));
+//        cardDueMinute.setText(intent.getStringExtra("MI"));
         cardDueDate.setText(intent.getStringExtra("dueDate"));
         cardCategory.setText(intent.getStringExtra("category"));
 
@@ -79,6 +82,16 @@ public class ToDoCardCreate extends AppCompatActivity {
             }
         });
     }
+
+    //for the stupid date picker horrible mess to pick a date it has to hit this sweet little baby.
+    EditText txtDate=(EditText)findViewById(R.id.txtdate);
+    txtDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        public void onFocusChange(View view, boolean hasfocus) {
+            if (hasfocus) {
+                DatePick dialog = new DatePick(view);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                dialog.show(ft, "DatePicker");
+
 
 
 

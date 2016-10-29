@@ -9,7 +9,7 @@ import java.util.UUID;
  * Created by eaglebrosi on 10/26/16.
  */
 
-public class ToDoItem {
+public class ToDoItem implements Comparable<ToDoItem>{
     @SerializedName("title")
     private String title;
     @SerializedName("text")
@@ -18,28 +18,22 @@ public class ToDoItem {
     private Date dateModified;
     @SerializedName("dueDate")
     private String dueDate;
-
+    @SerializedName("category")
     private String category;
+    @SerializedName("catCall")
+    private String catCall;
     @SerializedName("key")
     private String key;
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     public ToDoItem(String title, String text, String dueDate, Date dateModified, String category) {
         this.title = title;
         this.text = text;
+
         this.dateModified = dateModified;
         this.dueDate = dueDate;
         this.category = category;
         this.key = UUID.randomUUID().toString();
     }
-
 
     public String getCategory() {
         return category;
@@ -81,4 +75,24 @@ public class ToDoItem {
         this.dateModified = dateModified;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getCatCall() {
+        return catCall;
+    }
+
+    public void setCatCall(String catCall) {
+        this.catCall = catCall;
+    }
+
+    @Override
+    public int compareTo(ToDoItem another) {
+        return another.getCategory().compareToIgnoreCase(getCategory());
+    }
 }
