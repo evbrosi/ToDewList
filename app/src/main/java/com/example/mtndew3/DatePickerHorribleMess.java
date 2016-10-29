@@ -16,10 +16,9 @@ import java.util.Calendar;
  */
 @SuppressLint("ValidFragment")
 public class DatePickerHorribleMess extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-    EditText txtdate;
-
+    EditText dueDate;
     public DatePickerHorribleMess(View view) {
-        txtdate = (EditText) view;
+        dueDate = (EditText) view;
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -36,6 +35,6 @@ public class DatePickerHorribleMess extends DialogFragment implements DatePicker
     public void onDateSet(DatePicker view, int year, int month, int day) {
         //show to the selected date in the text box
         String date = day + "-" + (month + 1) + "-" + year;
-        txtdate.setText(date);
+        dueDate.setText(date);
     }
 }

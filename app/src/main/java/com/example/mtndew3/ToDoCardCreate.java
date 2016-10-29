@@ -12,16 +12,15 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
-import static com.example.mtndew3.R.id.activity_to_do_card_create;
-import static com.example.mtndew3.R.id.is_complete;
 
 public class ToDoCardCreate extends AppCompatActivity {
     private int index;
     private EditText cardTitle;
     private EditText cardText;
-//    private EditText cardDueYear;
+    //    private EditText cardDueYear;
 //    private EditText cardDueMonth;
 //    private EditText cardDueDay;
 //    private EditText cardDueMinute;
@@ -71,23 +70,25 @@ public class ToDoCardCreate extends AppCompatActivity {
                 intent.putExtra("dueDate", cardDueDate.getText().toString());
                 intent.putExtra("category", cardCategory.getText().toString());
                 intent.putExtra("index", index);
-//                cardDueDate = cardDueHour +":"+ cardDueMinute+" on "+ cardDueMonth + "/" + cardDueDay + "/" + cardDueYear;
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
+
+        //for the stupid date picker horrible mess to pick a date it has to hit this sweet little baby.
+        EditText dueDate = (EditText) findViewById(R.id.create_due_date);
+        dueDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    DatePickerHorribleMess sayMyDate = new DatePickerHorribleMess(v);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    sayMyDate.show(ft, "DatePicked");
+                }
+            }
+        });
     }
-
-    //for the stupid date picker horrible mess to pick a date it has to hit this sweet little baby.
-    EditText txtDate=(EditText)findViewById(R.id.txtdate);
-    txtDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-        public void onFocusChange(View view, boolean hasfocus) {
-            if (hasfocus) {
-                DatePick dialog = new DatePick(view);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                dialog.show(ft, "DatePicker");
-
-
+}
 
 
 //    Snackbar.make(v, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
@@ -116,4 +117,3 @@ public class ToDoCardCreate extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }*/
-}
