@@ -36,11 +36,13 @@ import static android.R.attr.data;
 import static com.example.mtndew3.R.array.categories;
 
 public class MainActivity extends AppCompatActivity {
-
+    // so each to do activity gets put into a card- and this is like the card catalogue.
+    // That puts each card under another.
     private ListView cardListView;
+
     private ArrayList<ToDoItem> toDoArrayList;
     private Gson gson;
-    List<Category> categories = new ArrayList<>();
+
     List<ToDoItem> cardLists;
     private SharedPreferences toDoPrefs;
     private ToDoArrayAdapter toDoArrayAdapter;
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     //I need this to clear the bowels of the listed cards.
     private ArrayList<Object> allItems = new ArrayList<>();
     private CategoryAdapter catAdapter;
+    private List<Category> categories = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +63,15 @@ public class MainActivity extends AppCompatActivity {
         gson = new Gson();
         setupToDoCards();
 
-        // YES! THIS IS NOW THE PROBLEM! HA HA HA HA HA! YES! It's still a null reference error.
-        Collections.sort(cardLists);
+        // YES! THIS IS NOW THE PROBLEM! HA HA HA HA HA! YES! It's still a null pointer error.
+        // ha ha ha ha. I mark it out and it shows off my horrible business. This project. This life.
+        // So here's what's happening right now. If I sort by cards- it freaks out on me(easy fix- i
+        // need todo look at all the itmes it sorts by.
+        // But it only shows me the stuff at the beginning. If I click the button- it dies. it completely
+        // dies. Also, it put my mountain dew note in each category. So I have a value and it put it in each.
+        // isn't that weird?
+
+        //Collections.sort(cardLists);
 
         cardListView = (ListView) findViewById(R.id.list_view);
         //Lets flush the old info and then refills with old info because that makes the most sense.
@@ -87,28 +98,17 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("Title", card.getTitle());
                 intent.putExtra("Text", card.getText());
                 intent.putExtra("category", card.getCategory());
+                // date modified???
+                // also i need TODO put cat call but I must figure out this NULL pointer exception.
                 intent.putExtra("dueDate", card.getDueDate());
                 intent.putExtra("Index", position);
 
                 startActivityForResult(intent, 1);
             }
         });
-//      i haven't set this up yet- i'll have to go into the constructor and add compariable notes to it
-//        Collections.sort(arrayOfList);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
-                startActivityForResult(intent, 1);
-//                Snackbar.make(view, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-            }
-        });
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -123,12 +123,28 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("category", toDoItem.getCategory());
                 // THE DATE MODIFIED MAGICALLY JUST GETS FILLED IN OR SOMETHING.
                 intent.putExtra("toDoDateModified", toDoItem.getDueDate());
-                // todo this is where I'd put the CAT CALL.
+                // todo CAT CALL.
                 intent.putExtra("Index", position);
 
                 startActivityForResult(intent, 1);
             }
         });
+
+
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
+                startActivityForResult(intent, 1);
+//                Snackbar.make(view, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            }
+        });
+
+
 
         cardListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -197,17 +213,18 @@ public class MainActivity extends AppCompatActivity {
             if (todoFile.exists()){
                 readTodos(todoFile);
             }else {
-                //new way
+                //gotta get all these sweet categories into practice you know.
                 categories.add(new Category("Personal", new ArrayList<ToDoItem>()));
                 categories.add(new Category("Maritial", new ArrayList<ToDoItem>()));
                 categories.add(new Category("Professional", new ArrayList<ToDoItem>()));
 
                 for(int i = 0; i < categories.size(); i++) {
-                    categories.get(i).cards.add(new ToDoItem("Mountain Dew",
+                    categories.get(i).cards.add(new ToDoItem("Diet Mountain Dew",
                             "This is your first To dew",
                             "Maritial",
                             new Date(),
                             "01/13/1984"));
+
 
 //                    categories.get(i).notes.add(new ToDoItem("Note 1", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
 //                    categories.get(i).notes.add(new T("Note 2", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
@@ -246,24 +263,72 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         } finally {
 
-            // Determine type of our collection
             Type collectionType = new TypeToken<List<Category>>(){}.getType();
-            // Pull out our categories in a list
-            List<Category> categoryList = gson.fromJson(todosText, collectionType);
-            // Create a LinkedList that we can edit from our categories list and save it
-            // to our global categories
-            //Todo they want this final- maybe it'll fix itself.
-            categories = new LinkedList(categoryList);
-            // old way
-//            Note[] noteList = gson.fromJson(todosText, Note[].class);
-//            noteLists = Arrays.asList(noteList);
 
-            //Object[] notesArray = noteLists.toArray();
+            List<Category> categoryList = gson.fromJson(todosText, collectionType);
+
+            categories = new LinkedList(categoryList);
         }
 //            ToDoItem[] noteList = gson.fromJson(todosText, ToDoItem[].class);
+    }
+
+    private void writeToDos() {
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            String json = gson.toJson(toDoArrayList);
+            byte[] bytes = json.getBytes();
+            outputStream.write(bytes);
+
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.close();
+            } catch (Exception ignored) {}
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_note_detail, menu);
+        return true;
+    }
+
+    private void clearItOutAndRefillAgain() {
+        allItems.clear();
+        for(int i = 0; i < categories.size(); i++) {
+            allItems.add(categories.get(i).getName());
+            for(int j = 0; j < categories.get(i).cards.size(); j++) {
+                allItems.add(categories.get(i).cards.get(j));
+            }
+        }
+    }
+
+}
 
 
+
+/*
+  i thought this would work and it just doesn't.
+    @Override
+    public void onSaveInstanceState(Bundle savedState){
+        //Do whatever you want to do when the application stops.
+        File[] filesDir = MainActivity.this.getFilesDir().listFiles();
+        for(File file : filesDir){
+            file.delete();
+        }
+        for (ToDoItem note : toDoArrayList){
+            (note);
+        }
+    }
+*/
+
+
+
+    /*
     private void saveIt(ToDoItem aToDo) {
         //  if()
 
@@ -284,14 +349,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-
-
-    /*
     private void returnFiles(){
         File[] filesDir = this.getFilesDir().listFiles();
         for (File file : filesDir) {
@@ -392,71 +449,3 @@ public class MainActivity extends AppCompatActivity {
     }
 
 */
-
-    private void writeToDos() {
-        FileOutputStream outputStream = null;
-        try {
-            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-            String json = gson.toJson(toDoArrayList);
-            byte[] bytes = json.getBytes();
-            outputStream.write(bytes);
-
-            outputStream.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                outputStream.close();
-            } catch (Exception ignored) {}
-        }
-    }
-
-/*
-            outputStream.write(gson.toJson(aToDo).getBytes());
-            outputStream.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException ioe) {
-            } catch (NullPointerException npe){
-            }catch (Exception e){
-            }
-        }
-    }
-
-    */
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_note_detail, menu);
-        return true;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedState){
-        //Do whatever you want to do when the application stops.
-        File[] filesDir = MainActivity.this.getFilesDir().listFiles();
-        for(File file : filesDir){
-            file.delete();
-        }
-        for (ToDoItem note : toDoArrayList){
-            saveIt(note);
-        }
-    }
-
-    private void clearItOutAndRefillAgain() {
-        allItems.clear();
-        for(int i = 0; i < categories.size(); i++) {
-            allItems.add(categories.get(i).getName());
-            for(int j = 0; j < categories.get(i).cards.size(); j++) {
-                allItems.add(categories.get(i).cards.get(j));
-            }
-        }
-    }
-
-}
