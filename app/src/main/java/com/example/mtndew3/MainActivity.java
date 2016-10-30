@@ -37,42 +37,57 @@ import static com.example.mtndew3.R.array.categories;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView notesList;
+    private ListView cardListView;
     private ArrayList<ToDoItem> toDoArrayList;
     private Gson gson;
     List<Category> categories = new ArrayList<>();
+    List<ToDoItem> cardLists;
     private SharedPreferences toDoPrefs;
     private ToDoArrayAdapter toDoArrayAdapter;
     String filename = "ToDoItemsFile";
-    TextView toDoTitle;
-    TextView toDoDate;
-    TextView toDoText;
+    //I need this to clear the bowels of the listed cards.
+    private ArrayList<Object> allItems = new ArrayList<>();
+    private CategoryAdapter catAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Only used to figure out if this is the first run.
         toDoPrefs = getPreferences(Context.MODE_PRIVATE);
-        toDoTitle = (TextView) findViewById(R.id.todo_title);
-        toDoDate = (TextView) findViewById(R.id.due_date);
-        toDoText = (TextView) findViewById(R.id.todo_text);
 
         gson = new Gson();
-//        setupToDoCards();
+        setupToDoCards();
 
-        notesList = (ListView)findViewById(R.id.listView);
-        toDoArrayAdapter = new ToDoArrayAdapter(this, R.layout.card_of_todo, toDoArrayList);
-        notesList.setAdapter(toDoArrayAdapter);
-        notesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // YES! THIS IS NOW THE PROBLEM! HA HA HA HA HA! YES! It's still a null reference error.
+        Collections.sort(cardLists);
+
+        cardListView = (ListView) findViewById(R.id.list_view);
+        //Lets flush the old info and then refills with old info because that makes the most sense.
+        clearItOutAndRefillAgain();
+        //there is hatred in this life. There is Donald Trump. There is a null reference error.
+        // It points to this code. Infinite sadness and maddness. No sleep. Nightmares about this
+        // project. Daydreams of getting it done. Hatred in my heart for everyone who is having a
+        // happy halloween weekend.
+//        toDoArrayAdapter = new ToDoArrayAdapter(this, R.layout.card_of_todo, toDoArrayList);
+
+        catAdapter = new CategoryAdapter(this, allItems);
+        cardListView.setAdapter(catAdapter);
+
+//        cardListView.setAdapter(toDoArrayAdapter);
+//        cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ToDoItem note = toDoArrayList.get(position);
+            allItems.get(position);
+                ToDoItem card = toDoArrayList.get(position);
 
                 Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
-                intent.putExtra("Title", note.getTitle());
-                intent.putExtra("Text", note.getText());
-                intent.putExtra("category", note.getCategory());
-                intent.putExtra("dueDate", note.getDueDate());
+                intent.putExtra("Title", card.getTitle());
+                intent.putExtra("Text", card.getText());
+                intent.putExtra("category", card.getCategory());
+                intent.putExtra("dueDate", card.getDueDate());
                 intent.putExtra("Index", position);
 
                 startActivityForResult(intent, 1);
@@ -95,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        notesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -104,16 +119,18 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
 
                 intent.putExtra("toDoTitle", toDoItem.getTitle());
-                intent.putExtra("completionDueDate", toDoItem.getDateModified());
+                intent.putExtra("toDoText", toDoItem.getText());
                 intent.putExtra("category", toDoItem.getCategory());
-
+                // THE DATE MODIFIED MAGICALLY JUST GETS FILLED IN OR SOMETHING.
+                intent.putExtra("toDoDateModified", toDoItem.getDueDate());
+                // todo this is where I'd put the CAT CALL.
                 intent.putExtra("Index", position);
 
-                startActivityForResult(intent, -1);
+                startActivityForResult(intent, 1);
             }
         });
 
-        notesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        cardListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 android.support.v7.app.AlertDialog.Builder alertBuilder = new android.support.v7.app.AlertDialog.Builder(MainActivity.this);
@@ -431,4 +448,15 @@ public class MainActivity extends AppCompatActivity {
             saveIt(note);
         }
     }
+
+    private void clearItOutAndRefillAgain() {
+        allItems.clear();
+        for(int i = 0; i < categories.size(); i++) {
+            allItems.add(categories.get(i).getName());
+            for(int j = 0; j < categories.get(i).cards.size(); j++) {
+                allItems.add(categories.get(i).cards.get(j));
+            }
+        }
+    }
+
 }
