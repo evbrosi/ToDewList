@@ -25,22 +25,13 @@ public class ToDoItem implements Comparable<ToDoItem>{
     @SerializedName("key")
     private String key;
 
-    public ToDoItem(String title, String text, String dueDate, Date dateModified, String category) {
+    public ToDoItem(String title, String text, String category,  Date dateModified, String dueDate) {
         this.title = title;
         this.text = text;
-
+        this.category = category;
         this.dateModified = dateModified;
         this.dueDate = dueDate;
-        this.category = category;
         this.key = UUID.randomUUID().toString();
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getTitle() {
@@ -51,14 +42,6 @@ public class ToDoItem implements Comparable<ToDoItem>{
         this.title = title;
     }
 
-    public String getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
-    }
-
     public String getText() {
         return text;
     }
@@ -67,12 +50,29 @@ public class ToDoItem implements Comparable<ToDoItem>{
         this.text = text;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+
     public Date getDateModified() {
         return dateModified;
     }
 
     public void setDateModified(Date dateModified) {
         this.dateModified = dateModified;
+    }
+
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
     }
 
     public String getKey() {
@@ -83,6 +83,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
         this.key = key;
     }
 
+    //todo actually do something with my cat call.
     public String getCatCall() {
         return catCall;
     }

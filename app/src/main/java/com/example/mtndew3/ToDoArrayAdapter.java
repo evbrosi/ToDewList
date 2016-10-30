@@ -33,6 +33,7 @@ public class ToDoArrayAdapter extends ArrayAdapter<ToDoItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
+        View rowOfCards = inflater.inflate(resource, parent, false);
 
         ToDoItem toDoThing69 = toDo.get(position);
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -48,20 +49,21 @@ public class ToDoArrayAdapter extends ArrayAdapter<ToDoItem> {
         TextView toDoTitle = (TextView) convertView.findViewById(R.id.todo_title);
         TextView toDoText = (TextView) convertView.findViewById(R.id.todo_text);
         TextView toDoDateModified = (TextView) convertView.findViewById(R.id.todo_date);
-        TextView toDoDueDate = (TextView) convertView.findViewById(R.id.due_date);
         TextView toDoCategory = (TextView) convertView.findViewById(R.id.todo_category);
+        TextView toDoDueDate = (TextView) convertView.findViewById(R.id.due_date);
 
         toDoTitle.setText(toDoThing69.getTitle());
         toDoText.setText(toDoThing69.getText());
-        toDoDueDate.setText(toDoThing69.getDueDate());
+        toDoDateModified.setText(formatter.format(toDoThing69.getDateModified()));
         toDoCategory.setText(toDoThing69.getCategory());
+        toDoDueDate.setText(toDoThing69.getDueDate());
 
    //     cardDueDate = cardDueHour +":"+ cardDueMinute+" on "+ cardDueMonth + "/" + cardDueDay + "/" + cardDueYear;
 
         // we gotta make this beast (date) into a string! we do that with Formatter.
 //        toDoDate.setText(formatter.format(toDoThing69.getDateModified()));
 
-        return convertView;
+        return rowOfCards;
     }
 
     public void updateAdapter (ArrayList<ToDoItem> item1){
