@@ -50,8 +50,10 @@ public class MainActivity extends AppCompatActivity {
     //I need this to clear the bowels of the listed cards.
     private ArrayList<Object> allItems = new ArrayList<>();
     private CategoryAdapter catAdapter;
+    // gotta make the cat numb so that it has a number associated with it that puts it in the right
+    //place when an idiot like me creates categories and slowly melts inside.
+    private int catNumb;
     private List<Category> categories = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
         cardListView = (ListView) findViewById(R.id.list_view);
         //Lets flush the old info and then refills with old info because that makes the most sense.
+
+        //this is now a Null Pointer Exception, except we know it's not.
         clearItOutAndRefillAgain();
         //there is hatred in this life. There is Donald Trump. There is a null reference error.
         // It points to this code. Infinite sadness and maddness. No sleep. Nightmares about this
@@ -172,27 +176,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+
             int index = data.getIntExtra("Index", -1);
-            // TODO i put null for categories- fix it.
-            ToDoItem card = new ToDoItem(data.getStringExtra("title"),
+
+            ToDoItem toDoCard = new ToDoItem(data.getStringExtra("title"),
                     data.getStringExtra("text"),
-                    data.getStringExtra("due_date"),
+                    data.getStringExtra("category"),
                     new Date(),
-                    data.getStringExtra("category"));
-            if (index < 0 || index > toDoArrayList.size() - 1) {
-                toDoArrayList.add(card);
-            }else {
-                ToDoItem oldCard = toDoArrayList.get(index);
-                toDoArrayList.set(index, card);
-                if (!oldCard.getTitle().equals(card.getTitle())) {
-                    File oldFile = new File (this.getFilesDir(), oldCard.getTitle());
-                    File newFile = new File (this.getFilesDir(), card.getTitle());
-                    oldFile.renameTo(newFile);
-                }
+                    data.getStringExtra("due_date"));
+            // todo put in the cat call.
+            switch (data.getStringExtra("category")) {
+                //todo put a .toDowncase thingy on the editText for category.
+                case ("maritial"):
+                    catNumb = 0;
+                    break;
+                case ("personal"):
+                    catNumb = 1;
+                    break;
+                case ("professional"):
+                    catNumb = 2;
+                    break;
             }
+// I GOTTA GO BACK AND PUT IN THE CATEGOIRES
+            categories.get(catNumb).cards.add(toDoCard);
             writeToDos();
-            //OH BOY- IT DOES NOT LIKE THIS BUSINESS! LOL. YOLO!
-            toDoArrayAdapter.updateAdapter(toDoArrayList);
+            clearItOutAndRefillAgain();
+            catAdapter.notifyDataSetChanged();
+
+            // check out putting this again. writeToDos();
+//            toDoArrayAdapter.updateAdapter(toDoArrayList);
         }
     }
 
@@ -298,18 +310,31 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void sortCategory(int catNum){
+        for (ToDoItem toDoCard : toDoArrayList){
+            if (toDoCard.getCategory().equals("work") && catNum == 1){
+                Log.d("@@@LIFE SUCKS@@@", toDoCard.getTitle());
+                toDoArrayAdapter.updateAdapter(toDoArrayList);
+            }else if (toDoCard.getCategory().equals("personal") && catNum == 2){
+                Log.d("HOLYFUCK!!!!!", toDoCard.getTitle());
+            }
+        }
+    }
+
+
+
     private void clearItOutAndRefillAgain() {
         allItems.clear();
         for(int i = 0; i < categories.size(); i++) {
             allItems.add(categories.get(i).getName());
+
+            // oh shit! it's your boy. if your boy is a null pointer exception.
             for(int j = 0; j < categories.get(i).cards.size(); j++) {
                 allItems.add(categories.get(i).cards.get(j));
             }
         }
     }
-
 }
-
 
 
 /*

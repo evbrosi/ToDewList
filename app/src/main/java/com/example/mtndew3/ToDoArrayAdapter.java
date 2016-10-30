@@ -50,7 +50,7 @@ public class ToDoArrayAdapter extends ArrayAdapter<ToDoItem> {
         TextView toDoText = (TextView) convertView.findViewById(R.id.todo_text);
         TextView toDoDateModified = (TextView) convertView.findViewById(R.id.todo_date);
         TextView toDoCategory = (TextView) convertView.findViewById(R.id.todo_category);
-        TextView toDoDueDate = (TextView) convertView.findViewById(R.id.due_date);
+        TextView toDoDueDate = (TextView) convertView.findViewById(R.id.todo_due_date);
 
         toDoTitle.setText(toDoThing69.getTitle());
         toDoText.setText(toDoThing69.getText());

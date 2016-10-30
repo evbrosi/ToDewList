@@ -11,16 +11,7 @@
     android:background="#cccccccc"
     tools:context="com.example.mtndew3.ToDoCardCreate">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/create_title"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="#ffffffff" />
-
-        <EditText
+    <EditText
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:inputType="textMultiLine"
@@ -43,20 +34,6 @@
         android:layout_alignParentEnd="true" />
 
 
-    <EditText
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/create_category"
-        android:background="#ffffff"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category: "
-        android:layout_toStartOf="@+id/create_category"
-        android:layout_marginEnd="12dp" />
-
     <CheckBox
         android:text="completed"
         android:layout_width="wrap_content"
@@ -68,11 +45,34 @@
         android:layout_alignStart="@+id/create_category" />
 
     <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_title"
+        android:background="#ffffffff"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_category"
+        android:background="#ffffff"
+        android:text="category"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/is_it_complete_button"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/create_due_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/create_due_date"
-        android:text="Due Date"
-        android:background="#ffffff" />
+        android:textSize="20sp"
+        android:hint="date due"
+        android:layout_marginStart="14dp"
+        android:layout_above="@+id/save_button1"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="12dp" />
 
 
 </RelativeLayout>

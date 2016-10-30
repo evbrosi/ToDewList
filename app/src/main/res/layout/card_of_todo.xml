@@ -16,29 +16,8 @@
         android:layout_alignParentStart="true"
         android:textStyle="bold"
         android:textSize="24sp"
-        android:padding="20dp"
+        android:padding="5dp"
         android:ellipsize="end" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="last modified: "
-        android:textColor="#ffffff"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="128dp"
-        android:id="@+id/textView2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="dates"
-        android:id="@+id/todo_date"
-        android:textColor="#ffffff"
-        android:layout_marginEnd="95dp"
-        android:layout_marginTop="24dp"
-        android:layout_below="@+id/todo_text"
-        android:layout_toStartOf="@+id/due_date" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -53,16 +32,6 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:text="Category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_alignEnd="@+id/due_date"
-        android:layout_marginEnd="10dp"
-        android:textColor="#ffffff"
-        android:id="@+id/todo_category" />
-
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -73,7 +42,41 @@
         android:textSize="20sp"
         android:ellipsize="end"
         android:paddingTop="10dp"
-        android:layout_above="@+id/todo_category"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="text"
+        android:padding="30dp"
+        android:id="@+id/todo_category"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:ellipsize="end"
+        android:paddingTop="10dp"
+         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="dates"
+        android:id="@+id/todo_date"
+        android:textColor="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/todo_due_date"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignEnd="@+id/todo_due_date" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="last modified: "
+        android:textColor="#ffffff"
+        android:id="@+id/textView2"
+        android:layout_marginBottom="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/todo_date" />
 
 </RelativeLayout>
