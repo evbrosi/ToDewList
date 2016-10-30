@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         // dies. Also, it put my mountain dew note in each category. So I have a value and it put it in each.
         // isn't that weird?
 
-        //Collections.sort(cardLists);
+        // Collections.sort(cardLists);
 
         cardListView = (ListView) findViewById(R.id.list_view);
         //Lets flush the old info and then refills with old info because that makes the most sense.
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("category", card.getCategory());
                 // date modified???
                 // also i need TODO put cat call but I must figure out this NULL pointer exception.
+                intent.putExtra("catCall", card.getCatCall());
                 intent.putExtra("dueDate", card.getDueDate());
                 intent.putExtra("Index", position);
 
@@ -113,29 +114,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
-
-        cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                ToDoItem toDoItem = toDoArrayList.get(position);
-
-                Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
-
-                intent.putExtra("toDoTitle", toDoItem.getTitle());
-                intent.putExtra("toDoText", toDoItem.getText());
-                intent.putExtra("category", toDoItem.getCategory());
-                // THE DATE MODIFIED MAGICALLY JUST GETS FILLED IN OR SOMETHING.
-                intent.putExtra("toDoDateModified", toDoItem.getDueDate());
-                // todo CAT CALL.
-                intent.putExtra("Index", position);
-
-                startActivityForResult(intent, 1);
-            }
-        });
-
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -147,8 +125,6 @@ public class MainActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
             }
         });
-
-
 
         cardListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -196,27 +172,20 @@ public class MainActivity extends AppCompatActivity {
                 case ("professional"):
                     catNumb = 2;
                     break;
+                // i know that this probably will break the ability to add categories but you know. Things.
+                default:
+                    catNumb=3;
+                    break;
             }
 // I GOTTA GO BACK AND PUT IN THE CATEGOIRES
-            categories.get(catNumb).cards.add(toDoCard);
+//            categories.get(catNumb).cards.add(toDoCard);
             writeToDos();
             clearItOutAndRefillAgain();
             catAdapter.notifyDataSetChanged();
-
-            // check out putting this again. writeToDos();
+            writeToDos();
 //            toDoArrayAdapter.updateAdapter(toDoArrayList);
         }
     }
-
-
-//        getIntent();
-//        String title = data.getStringExtra("title");
-//        String fullDate = data.getStringExtra("fullDate");
-//        String text = data.getStringExtra("text");
-//        toDoTitle.setText(title);
-//        toDoDate.setText(fullDate);
-    //   private ListView notesList;
-    // private ArrayList<ToDoItem> arrayOfList;
 
     public void setupToDoCards() {
             toDoArrayList = new ArrayList<>();
@@ -226,7 +195,8 @@ public class MainActivity extends AppCompatActivity {
             if (todoFile.exists()){
                 readTodos(todoFile);
             }else {
-                //gotta get all these sweet categories into practice you know.
+                //gotta get all these sweet categories into practice you know. Actually I'm just pretending that
+                // there are three categories into hitting them sweet parameters.
                 categories.add(new Category("Personal", new ArrayList<ToDoItem>()));
                 categories.add(new Category("Maritial", new ArrayList<ToDoItem>()));
                 categories.add(new Category("Professional", new ArrayList<ToDoItem>()));
@@ -237,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
                             "Maritial",
                             new Date(),
                             "01/13/1984"));
-
 
 //                    categories.get(i).notes.add(new ToDoItem("Note 1", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
 //                    categories.get(i).notes.add(new T("Note 2", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
@@ -320,8 +289,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
     private void clearItOutAndRefillAgain() {
         allItems.clear();
@@ -473,5 +440,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+//        getIntent();
+//        String title = data.getStringExtra("title");
+//        String fullDate = data.getStringExtra("fullDate");
+//        String text = data.getStringExtra("text");
+//        toDoTitle.setText(title);
+//        toDoDate.setText(fullDate);
+    //   private ListView notesList;
+    // private ArrayList<ToDoItem> arrayOfList;
 
 */
