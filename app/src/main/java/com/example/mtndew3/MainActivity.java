@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             writeToDos();
+            //OH BOY- IT DOES NOT LIKE THIS BUSINESS! LOL. YOLO!
             toDoArrayAdapter.updateAdapter(toDoArrayList);
         }
     }

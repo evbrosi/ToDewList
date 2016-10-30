@@ -28,7 +28,7 @@ public class ToDoCardCreate extends AppCompatActivity {
     // I really don't want to talk about WHAT A HORRIBLE MESS THE DATE PICK HORRIBLE MESS WAS.
     private EditText cardCategory;
     private EditText cardDueDate;
-    private Button save_button1;
+    private Button saveButt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,38 +37,33 @@ public class ToDoCardCreate extends AppCompatActivity {
 
         cardTitle = (EditText) findViewById(R.id.create_title);
         cardText = (EditText) findViewById(R.id.create_text);
-//        cardDueYear = (EditText) findViewById(R.id.due_year);
-//        cardDueMonth = (EditText) findViewById(R.id.due_month);
-//        cardDueDay = (EditText) findViewById(R.id.due_day);
-//        cardDueHour = (EditText) findViewById(R.id.due_hour);
-//        cardDueMinute = (EditText) findViewById(R.id.due_minute);
-        cardDueDate = (EditText) findViewById(R.id.create_due_date);
         cardCategory = (EditText) findViewById(R.id.create_category);
+        //date modified placeholder.
+        cardDueDate = (EditText) findViewById(R.id.create_due_date);
+
+        saveButt = (Button)findViewById(R.id.save_button1);
 
         Intent intent = getIntent();
 
-        index = intent.getIntExtra("index", -1);
-
         cardTitle.setText(intent.getStringExtra("title"));
         cardText.setText(intent.getStringExtra("text"));
-//        cardDueYear.setText(intent.getStringExtra("yyyy"));
-//        cardDueMonth.setText(intent.getStringExtra("mm"));
-//        cardDueDay.setText(intent.getStringExtra("dd"));
-//        cardDueHour.setText(intent.getStringExtra("HR"));
-//        cardDueMinute.setText(intent.getStringExtra("MI"));
-        cardDueDate.setText(intent.getStringExtra("dueDate"));
         cardCategory.setText(intent.getStringExtra("category"));
+        // date modified placeholder. I was just consistently getting confused.
+        cardDueDate.setText(intent.getStringExtra("dueDate"));
+        index = intent.getIntExtra("index", -1);
 
         //   CheckBox isItDone = (checkbox) findViewById(R.id.is_complete);
 
-        save_button1.setOnClickListener(new View.OnClickListener() {
+        // this is throwing a null pointer error- so i need to check what all I'm defining here.
+        saveButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
                 intent.putExtra("title", cardTitle.getText().toString());
                 intent.putExtra("text", cardText.getText().toString());
-                intent.putExtra("dueDate", cardDueDate.getText().toString());
                 intent.putExtra("category", cardCategory.getText().toString());
+                // date modified placeholder. I was just consistently getting confused.
+                intent.putExtra("dueDate", cardDueDate.getText().toString());
                 intent.putExtra("index", index);
                 setResult(RESULT_OK, intent);
                 finish();
