@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.AdapterView;
@@ -73,9 +74,12 @@ public class MainActivity extends AppCompatActivity {
         // dies. Also, it put my mountain dew note in each category. So I have a value and it put it in each.
         // isn't that weird?
 
-        // Collections.sort(cardLists);
+        //Collections.sort(cardLists);
+
+        flushOutAndPoopItAllBackAgain();
 
         cardListView = (ListView) findViewById(R.id.list_view);
+        flushOutAndPoopItAllBackAgain();
         //Lets flush the old info and then refills with old info because that makes the most sense.
 
         //this is now a Null Pointer Exception, except we know it's not.
@@ -95,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 allItems.get(position);
-                ToDoItem card = toDoArrayList.get(position);
+                ToDoItem card = (ToDoItem) allItems.get(position);
 
                 Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
                 intent.putExtra("Title", card.getTitle());
@@ -113,17 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
-                startActivityForResult(intent, 1);
-//                Snackbar.make(view, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-            }
-        });
 
         cardListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -147,6 +140,17 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
+                startActivityForResult(intent, 1);
+//                Snackbar.make(view, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override
@@ -160,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
                     data.getStringExtra("text"),
                     data.getStringExtra("category"),
                     new Date(),
-                    data.getStringExtra("due_date"));
+                    data.getStringExtra("due_date"),
+                    data.getStringExtra("catCall"));
             // todo put in the cat call.
             switch (data.getStringExtra("category")) {
                 //todo put a .toDowncase thingy on the editText for category.
@@ -174,11 +179,11 @@ public class MainActivity extends AppCompatActivity {
                     catNumb = 2;
                     break;
                 // i know that this probably will break the ability to add categories but you know. Things.
-                default:
-                    catNumb = 3;
-                    break;
             }
 // I GOTTA GO BACK AND PUT IN THE CATEGOIRES
+            categories.get(catNumb).cards.add(toDoCard);
+            writeToDos();
+            flushOutAndPoopItAllBackAgain();
             catAdapter.notifyDataSetChanged();
             writeToDos();
 //            toDoArrayAdapter.updateAdapter(toDoArrayList);
@@ -205,7 +210,9 @@ public class MainActivity extends AppCompatActivity {
                         // i leave this empty because it'll populate all three categories
                         " ",
                         new Date(),
-                        "01/13/1984"));
+                        "01/13/1984",
+                        //left the cat call empty
+                        ""));
 
 //                    categories.get(i).notes.add(new ToDoItem("Note 1", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
 //                    categories.get(i).notes.add(new T("Note 2", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
@@ -243,12 +250,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-
-            Type collectionType = new TypeToken<List<Category>>() {
+            Type collectType = new TypeToken<List<Category>>() {
             }.getType();
-
-            List<Category> categoryList = gson.fromJson(todosText, collectionType);
-
+            List<Category> categoryList = gson.fromJson(todosText, collectType);
             categories = new LinkedList(categoryList);
         }
 //            ToDoItem[] noteList = gson.fromJson(todosText, ToDoItem[].class);
@@ -275,10 +279,46 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_note_detail, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int cardNumb = item.getItemId();
+        if (cardNumb == R.id.action_settings) {
+            sortCategory(1);
+            return true;
+        }else if (cardNumb == R.id.action_personal){
+            sortCategory(2);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void flushOutAndPoopItAllBackAgain() {
+        allItems.clear();
+        for(int i = 0; i < categories.size(); i++) {
+            allItems.add(categories.get(i).getName());
+            for(int j = 0; j < categories.get(i).cards.size(); j++) {
+                allItems.add(categories.get(i).cards.get(j));
+            }
+        }
+    }
+
+    public void sortCategory(int catNum){
+        for (ToDoItem card : toDoArrayList){
+            if (card.getCategory().equals("work") && catNum == 1){
+                Log.d("*****", card.getTitle());
+
+                toDoArrayAdapter.updateAdapter(toDoArrayList);
+            }else if (card.getCategory().equals("personal") && catNum == 2){
+                Log.d("***Sorted!***", card.getTitle());
+            }
+        }
+    }
+
+
 
 // I threw these last two bits and pieces into it because i felt like it might work or some crap.
 // it doesn't. but I left it in. thinking something dumb.

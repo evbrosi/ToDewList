@@ -9,6 +9,9 @@ import java.util.UUID;
  * Created by eaglebrosi on 10/26/16.
  */
 
+
+//i think this is fine and isn't causing the problems. I need to figure this out.
+//I fear that i'm going crazy. I fear that there is no hope.
 public class ToDoItem implements Comparable<ToDoItem>{
     @SerializedName("title")
     private String title;
@@ -25,12 +28,13 @@ public class ToDoItem implements Comparable<ToDoItem>{
     @SerializedName("key")
     private String key;
 
-    public ToDoItem(String title, String text, String category,  Date dateModified, String dueDate) {
+    public ToDoItem(String title, String text, String category,  Date dateModified, String dueDate, String catCall) {
         this.title = title;
         this.text = text;
         this.category = category;
         this.dateModified = dateModified;
         this.dueDate = dueDate;
+        this.catCall = catCall;
         this.key = UUID.randomUUID().toString();
     }
 
@@ -58,7 +62,6 @@ public class ToDoItem implements Comparable<ToDoItem>{
         this.category = category;
     }
 
-
     public Date getDateModified() {
         return dateModified;
     }
@@ -75,6 +78,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
         this.dueDate = dueDate;
     }
 
+/* don't need it with my sweet catCall if that would work.
     public String getKey() {
         return key;
     }
@@ -82,7 +86,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
     public void setKey(String key) {
         this.key = key;
     }
-
+*/
     //todo actually do something with my cat call.
     public String getCatCall() {
         return catCall;
@@ -93,7 +97,7 @@ public class ToDoItem implements Comparable<ToDoItem>{
     }
 
     @Override
-    public int compareTo(ToDoItem another) {
-        return another.getCategory().compareToIgnoreCase(getCategory());
+    public int compareTo(ToDoItem card) {
+        return card.getCategory().compareToIgnoreCase(getCategory());
     }
 }

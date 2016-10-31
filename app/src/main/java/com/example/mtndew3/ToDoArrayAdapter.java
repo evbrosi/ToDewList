@@ -35,7 +35,7 @@ public class ToDoArrayAdapter extends ArrayAdapter<ToDoItem> {
     public View getView(int position, View convertView, ViewGroup parent){
         View rowOfCards = inflater.inflate(resource, parent, false);
 
-        ToDoItem toDoThing69 = toDo.get(position);
+        ToDoItem toDoThing = toDo.get(position);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         View toDoRow = inflater.inflate(R.layout.card_of_todo, parent, false);
@@ -52,11 +52,11 @@ public class ToDoArrayAdapter extends ArrayAdapter<ToDoItem> {
         TextView toDoCategory = (TextView) convertView.findViewById(R.id.todo_category);
         TextView toDoDueDate = (TextView) convertView.findViewById(R.id.todo_due_date);
 
-        toDoTitle.setText(toDoThing69.getTitle());
-        toDoText.setText(toDoThing69.getText());
-        toDoDateModified.setText(formatter.format(toDoThing69.getDateModified()));
-        toDoCategory.setText(toDoThing69.getCategory());
-        toDoDueDate.setText(toDoThing69.getDueDate());
+        toDoTitle.setText(toDoThing.getTitle());
+        toDoText.setText(toDoThing.getText());
+        toDoDateModified.setText(formatter.format(toDoThing.getDateModified()));
+        toDoCategory.setText(toDoThing.getCategory());
+        toDoDueDate.setText(toDoThing.getDueDate());
 
    //     cardDueDate = cardDueHour +":"+ cardDueMinute+" on "+ cardDueMonth + "/" + cardDueDay + "/" + cardDueYear;
 
