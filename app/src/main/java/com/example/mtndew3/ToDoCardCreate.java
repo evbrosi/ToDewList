@@ -25,7 +25,10 @@ public class ToDoCardCreate extends AppCompatActivity {
 //    private EditText cardDueDay;
 //    private EditText cardDueMinute;
 //    private EditText cardDueHour;
-    // I really don't want to talk about WHAT A HORRIBLE MESS THE DATE PICK HORRIBLE MESS WAS.
+    // I really don't want to talk about WHAT A HORRIBLE MESS THE DATE PICK
+    // HORRIBLE MESS WAS but i'm leaving it in to prove that there is life
+    // after death and that life is not a good life. It's a terrible time
+    // why god why?
     private EditText cardCategory;
     private EditText cardDueDate;
     private Button saveButt;
