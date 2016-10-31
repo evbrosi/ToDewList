@@ -44,7 +44,7 @@ public class ToDoCardCreate extends AppCompatActivity {
         //date modified placeholder.
         cardDueDate = (EditText) findViewById(R.id.create_due_date);
 
-        saveButt = (Button)findViewById(R.id.save_button1);
+        saveButt = (Button) findViewById(R.id.save_button1);
 
         Intent intent = getIntent();
 
@@ -87,6 +87,7 @@ public class ToDoCardCreate extends AppCompatActivity {
         });
     }
 }
+
 
 
 //    Snackbar.make(v, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)

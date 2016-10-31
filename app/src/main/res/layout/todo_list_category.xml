@@ -7,7 +7,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="category"
-        android:background="#ff0000"
         android:textColor="#ff8000"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:paddingTop="10dp"

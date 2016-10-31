@@ -146,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
+                intent.putExtra("Title", "");
+                intent.putExtra("Text", "");
+                intent.putExtra("Category", "");
+                intent.putExtra("DueDate", "");
+                intent.putExtra("catId", "");
                 startActivityForResult(intent, 1);
 //                Snackbar.make(view, "It's mtn dew. Not mtn don't.", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
@@ -181,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 // i know that this probably will break the ability to add categories but you know. Things.
             }
 // I GOTTA GO BACK AND PUT IN THE CATEGOIRES
+            //this and the collection and the death of my soul= it destroys!
             categories.get(catNumb).cards.add(toDoCard);
             writeToDos();
             flushOutAndPoopItAllBackAgain();
