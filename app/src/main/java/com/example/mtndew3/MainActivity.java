@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         //Lets flush the old info and then refills with old info because that makes the most sense.
 
         //this is now a Null Pointer Exception, except we know it's not.
-        clearItOutAndRefillAgain();
         //there is hatred in this life. There is Donald Trump. There is a null reference error.
         // It points to this code. Infinite sadness and maddness. No sleep. Nightmares about this
         // project. Daydreams of getting it done. Hatred in my heart for everyone who is having a
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            allItems.get(position);
+                allItems.get(position);
                 ToDoItem card = toDoArrayList.get(position);
 
                 Intent intent = new Intent(MainActivity.this, ToDoCardCreate.class);
@@ -136,10 +135,12 @@ public class MainActivity extends AppCompatActivity {
                 alertBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ToDoItem note = toDoArrayList.get(position);
-                        deleteFile("##" + note.getTitle());
-                        toDoArrayList.remove(position);
-                        toDoArrayAdapter.updateAdapter(toDoArrayList);
+                        ToDoItem cards = (ToDoItem) allItems.get(position);
+                        categories.get(catNumb).cards.remove(cards);
+                        allItems.remove(position);
+                        deleteFile(cards.getTitle());
+                        catAdapter.notifyDataSetChanged();
+                        writeToDos();
                     }
                 });
                 alertBuilder.create().show();
@@ -174,13 +175,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 // i know that this probably will break the ability to add categories but you know. Things.
                 default:
-                    catNumb=3;
+                    catNumb = 3;
                     break;
             }
 // I GOTTA GO BACK AND PUT IN THE CATEGOIRES
-//            categories.get(catNumb).cards.add(toDoCard);
-            writeToDos();
-            clearItOutAndRefillAgain();
             catAdapter.notifyDataSetChanged();
             writeToDos();
 //            toDoArrayAdapter.updateAdapter(toDoArrayList);
@@ -188,50 +186,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setupToDoCards() {
-            toDoArrayList = new ArrayList<>();
+        toDoArrayList = new ArrayList<>();
 
-            File filesDir = this.getFilesDir();
-            File todoFile = new File(filesDir + File.separator + filename);
-            if (todoFile.exists()){
-                readTodos(todoFile);
-            }else {
-                //gotta get all these sweet categories into practice you know. Actually I'm just pretending that
-                // there are three categories into hitting them sweet parameters.
-                categories.add(new Category("Personal", new ArrayList<ToDoItem>()));
-                categories.add(new Category("Maritial", new ArrayList<ToDoItem>()));
-                categories.add(new Category("Professional", new ArrayList<ToDoItem>()));
+        File filesDir = this.getFilesDir();
+        File todoFile = new File(filesDir + File.separator + filename);
+        if (todoFile.exists()) {
+            readTodos(todoFile);
+        } else {
+            //gotta get all these sweet categories into practice you know. Actually I'm just pretending that
+            // there are three categories into hitting them sweet parameters.
+            categories.add(new Category("Personal", new ArrayList<ToDoItem>()));
+            categories.add(new Category("Maritial", new ArrayList<ToDoItem>()));
+            categories.add(new Category("Professional", new ArrayList<ToDoItem>()));
 
-                for(int i = 0; i < categories.size(); i++) {
-                    categories.get(i).cards.add(new ToDoItem("Diet Mountain Dew",
-                            "This is your first To dew",
-                            "Maritial",
-                            new Date(),
-                            "01/13/1984"));
+            for (int i = 0; i < categories.size(); i++) {
+                categories.get(i).cards.add(new ToDoItem("Diet Mountain Dew",
+                        "This is your first To dew",
+                        // i leave this empty because it'll populate all three categories
+                        " ",
+                        new Date(),
+                        "01/13/1984"));
 
 //                    categories.get(i).notes.add(new ToDoItem("Note 1", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
 //                    categories.get(i).notes.add(new T("Note 2", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
 //                    categories.get(i).notes.add(new Note("Note 3", "This is a note", new Date(), "work", "mipmap-hdpi/ic_launcher.png", "1/1/1999", ""));
-                }
-                writeToDos();
             }
-        }
-/*
-
-        File todoFile = new File(filesDir + File.separator + filename);
-
-        if (todoFile.exists()){
-            readTodos(todoFile);
-
-            for (ToDoItem card : toDoList) {
-                Log.d("To do read from file", card.getTitle() + "" + card.getText());
-                toDoArrayList.add(card);
-            }
-        } else {
-            toDoList.add(new ToDoItem("Mountain Dew", "This is your first To dew", new Date(), "01/13/1984", "personal"));
             writeToDos();
         }
     }
-*/
+
+    /*
+            File todoFile = new File(filesDir + File.separator + filename);
+
+            if (todoFile.exists()){
+                readTodos(todoFile);
+
+                for (ToDoItem card : toDoList) {
+                    Log.d("To do read from file", card.getTitle() + "" + card.getText());
+                    toDoArrayList.add(card);
+                }
+            } else {
+                toDoList.add(new ToDoItem("Mountain Dew", "This is your first To dew", new Date(), "01/13/1984", "personal"));
+                writeToDos();
+            }
+        }
+    */
     private void readTodos(File todoFile) {
         FileInputStream inputStream = null;
         String todosText = "";
@@ -245,7 +244,8 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         } finally {
 
-            Type collectionType = new TypeToken<List<Category>>(){}.getType();
+            Type collectionType = new TypeToken<List<Category>>() {
+            }.getType();
 
             List<Category> categoryList = gson.fromJson(todosText, collectionType);
 
@@ -268,7 +268,8 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             try {
                 outputStream.close();
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -279,33 +280,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void sortCategory(int catNum){
-        for (ToDoItem toDoCard : toDoArrayList){
-            if (toDoCard.getCategory().equals("work") && catNum == 1){
-                Log.d("@@@LIFE SUCKS@@@", toDoCard.getTitle());
-                toDoArrayAdapter.updateAdapter(toDoArrayList);
-            }else if (toDoCard.getCategory().equals("personal") && catNum == 2){
-                Log.d("HOLYFUCK!!!!!", toDoCard.getTitle());
-            }
-        }
-    }
-
-    private void clearItOutAndRefillAgain() {
-        allItems.clear();
-        for(int i = 0; i < categories.size(); i++) {
-            allItems.add(categories.get(i).getName());
-
-            // oh shit! it's your boy. if your boy is a null pointer exception.
-            for(int j = 0; j < categories.get(i).cards.size(); j++) {
-                allItems.add(categories.get(i).cards.get(j));
-            }
-        }
-    }
-}
-
-
-/*
-  i thought this would work and it just doesn't.
+// I threw these last two bits and pieces into it because i felt like it might work or some crap.
+// it doesn't. but I left it in. thinking something dumb.
     @Override
     public void onSaveInstanceState(Bundle savedState){
         //Do whatever you want to do when the application stops.
@@ -313,22 +289,19 @@ public class MainActivity extends AppCompatActivity {
         for(File file : filesDir){
             file.delete();
         }
-        for (ToDoItem note : toDoArrayList){
-            (note);
+        for (ToDoItem card : toDoArrayList){
+            myLifeIsOverButThisMightSave(card);
         }
     }
-*/
 
 
-
-    /*
-    private void saveIt(ToDoItem aToDo) {
+    private void myLifeIsOverButThisMightSave(ToDoItem card) {
         //  if()
 
         FileOutputStream outputStream = null;
         try {
-            outputStream = openFileOutput("##" + aToDo.getTitle(), Context.MODE_PRIVATE);
-            outputStream.write(aToDo.getText().getBytes());
+            outputStream = openFileOutput(card.getTitle(), Context.MODE_PRIVATE);
+            outputStream.write(card.getText().getBytes());
             outputStream.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -341,113 +314,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    private void returnFiles(){
-        File[] filesDir = this.getFilesDir().listFiles();
-        for (File file : filesDir) {
-            FileInputStream inputStream = null;
-            String title = file.getName();
-            if (!title.startsWith("##")){
-                continue;
-            }else{
-                title=title.substring(2,title.length());
-            }
-            Date date = new Date(file.lastModified());
-            String text = "";
-            try {
-                inputStream = openFileInput("##" + title);
-                byte[] input = new byte[inputStream.available()];
-                while (inputStream.read(input) != -1) {
-                }
-                text += new String(input);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            toDoArrayList.add(new ToDoItem(title, text, date, null));
-        }
-    }
-
-            arrayOfList = new ArrayList<>();
-        if (toDoPrefs.getBoolean("firstRun", true)){
-            SharedPreferences.Editor editor = toDoPrefs.edit();
-            editor.putBoolean("firstRun", false);
-            editor.apply();
-
-            // this just shows what the card looks like. It populates with true because it's done.
-            ToDoItem toDo1 = new ToDoItem("Mountain Dew", "This is your first To do", new Date(), true);
-            arrayOfList.add(toDo1);
-
-            for (ToDoItem aToDo: arrayOfList) {
-                writeFile(aToDo);
-            }
-        } else {
-            File[] filesDir = this.getFilesDir().listFiles();
-            for (File file : filesDir) {
-                FileInputStream inputStream = null;
-                String title = file.getName();
-                Date date = new Date(file.lastModified());
-                String text ="";
-                try {
-                    inputStream = openFileInput(title);
-                    byte[] input = new byte[inputStream.available()];
-                    while (inputStream.read(input) != -1){}
-                    text += new String (input);
-                    // open file input required this exception
-                    } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    // input stream available requires this exception
-                    } catch (IOException e) {
-                    e.printStackTrace();
-                    } finally {
-                        ToDoItem aToDo = gson.fromJson(text, ToDoItem.class);
-                    aToDo.setDateModified(date);
-                    arrayOfList.add(aToDo);
-                    try {
-                        inputStream.close();
-                    } catch (Exception ignored) {}
-                }
-            }
-        }
-    }
-    */
-
-
-
-    /*
-    private void writeToDos () {
-        FileOutputStream outputStream = null;
-        try {
-            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-
-            String json = gson.toJson(toDoArrayList);
-            byte[] bytes = json.getBytes();
-            outputStream.write(bytes);
-
-            outputStream.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-//        getIntent();
-//        String title = data.getStringExtra("title");
-//        String fullDate = data.getStringExtra("fullDate");
-//        String text = data.getStringExtra("text");
-//        toDoTitle.setText(title);
-//        toDoDate.setText(fullDate);
-    //   private ListView notesList;
-    // private ArrayList<ToDoItem> arrayOfList;
-
-*/
+}
